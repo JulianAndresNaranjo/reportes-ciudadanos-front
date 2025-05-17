@@ -3,10 +3,13 @@ import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { routes } from './app.routes';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './servicios/auth.service';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterModule, CommonModule],
+  imports: [RouterOutlet, RouterModule, CommonModule, HttpClientModule, FormsModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

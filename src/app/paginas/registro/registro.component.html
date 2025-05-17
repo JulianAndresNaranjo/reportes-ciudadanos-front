@@ -3,20 +3,15 @@
     <div class="card-body">
       <h3 class="card-title text-center mb-4">Registro de Usuario</h3>
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-        
+
         <!-- Número de Documento -->
         <div class="mb-3">
           <label for="documentNumber" class="form-label">Número de Documento</label>
-          <input
-            type="number"
-            id="documentNumber"
-            formControlName="documentNumber"
-            class="form-control"
-            required
+          <input type="number" id="documentNumber" formControlName="documentNumber" class="form-control" required
             [class.is-invalid]="registerForm.get('documentNumber')?.invalid && registerForm.get('documentNumber')?.touched"
-            [class.is-valid]="registerForm.get('documentNumber')?.valid && registerForm.get('documentNumber')?.touched"
-          />
-          <div *ngIf="registerForm.get('documentNumber')?.invalid && registerForm.get('documentNumber')?.touched" class="invalid-feedback">
+            [class.is-valid]="registerForm.get('documentNumber')?.valid && registerForm.get('documentNumber')?.touched" />
+          <div *ngIf="registerForm.get('documentNumber')?.invalid && registerForm.get('documentNumber')?.touched"
+            class="invalid-feedback">
             El número de documento es requerido y debe ser un número.
           </div>
         </div>
@@ -24,51 +19,31 @@
         <!-- Nombre Completo -->
         <div class="mb-3">
           <label for="name" class="form-label">Nombre Completo</label>
-          <input
-            type="text"
-            id="name"
-            formControlName="name"
-            class="form-control"
-            required
+          <input type="text" id="name" formControlName="name" class="form-control" required
             [class.is-invalid]="registerForm.get('name')?.invalid && registerForm.get('name')?.touched"
-            [class.is-valid]="registerForm.get('name')?.valid && registerForm.get('name')?.touched"
-          />
+            [class.is-valid]="registerForm.get('name')?.valid && registerForm.get('name')?.touched" />
           <div *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched" class="invalid-feedback">
             El nombre es requerido.
           </div>
         </div>
 
-        <!-- Ciudad de Residencia -->
-        <div class="mb-3">
-          <label for="residenceCity" class="form-label">Ciudad de Residencia</label>
-          <input
-            type="text"
-            id="residenceCity"
-            formControlName="residenceCity"
-            class="form-control"
-            required
-            [class.is-invalid]="registerForm.get('residenceCity')?.invalid && registerForm.get('residenceCity')?.touched"
-            [class.is-valid]="registerForm.get('residenceCity')?.valid && registerForm.get('residenceCity')?.touched"
-          />
-          <div *ngIf="registerForm.get('residenceCity')?.invalid && registerForm.get('residenceCity')?.touched" class="invalid-feedback">
-            La ciudad es requerida.
-          </div>
-        </div>
+<div class="mb-3">
+  <label for="ciudad" class="form-label">Ciudad</label>
+  <select class="form-select" id="ciudad" formControlName="residenceCity" required>
+    <option disabled selected value=""></option>
+    <option *ngFor="let ciudad of ciudades" [value]="ciudad">{{ ciudad }}</option>
+  </select>
+</div>
+
 
         <!-- Teléfono -->
         <div class="mb-3">
           <label for="phone" class="form-label">Teléfono</label>
-          <input
-            type="tel"
-            id="phone"
-            formControlName="phone"
-            class="form-control"
-            required
-            pattern="^[0-9]{7,10}$"
+          <input type="tel" id="phone" formControlName="phone" class="form-control" required pattern="^[0-9]{7,10}$"
             [class.is-invalid]="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched"
-            [class.is-valid]="registerForm.get('phone')?.valid && registerForm.get('phone')?.touched"
-          />
-          <div *ngIf="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched" class="invalid-feedback">
+            [class.is-valid]="registerForm.get('phone')?.valid && registerForm.get('phone')?.touched" />
+          <div *ngIf="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched"
+            class="invalid-feedback">
             El teléfono debe contener entre 7 y 10 dígitos numéricos.
           </div>
         </div>
@@ -76,16 +51,11 @@
         <!-- Dirección -->
         <div class="mb-3">
           <label for="address" class="form-label">Dirección</label>
-          <input
-            type="text"
-            id="address"
-            formControlName="address"
-            class="form-control"
-            required
+          <input type="text" id="address" formControlName="address" class="form-control" required
             [class.is-invalid]="registerForm.get('address')?.invalid && registerForm.get('address')?.touched"
-            [class.is-valid]="registerForm.get('address')?.valid && registerForm.get('address')?.touched"
-          />
-          <div *ngIf="registerForm.get('address')?.invalid && registerForm.get('address')?.touched" class="invalid-feedback">
+            [class.is-valid]="registerForm.get('address')?.valid && registerForm.get('address')?.touched" />
+          <div *ngIf="registerForm.get('address')?.invalid && registerForm.get('address')?.touched"
+            class="invalid-feedback">
             La dirección es requerida.
           </div>
         </div>
@@ -93,16 +63,11 @@
         <!-- Correo Electrónico -->
         <div class="mb-3">
           <label for="email" class="form-label">Correo Electrónico</label>
-          <input
-            type="email"
-            id="email"
-            formControlName="email"
-            class="form-control"
-            required
+          <input type="email" id="email" formControlName="email" class="form-control" required
             [class.is-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
-            [class.is-valid]="registerForm.get('email')?.valid && registerForm.get('email')?.touched"
-          />
-          <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="invalid-feedback">
+            [class.is-valid]="registerForm.get('email')?.valid && registerForm.get('email')?.touched" />
+          <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+            class="invalid-feedback">
             El correo electrónico debe ser válido.
           </div>
         </div>
@@ -110,17 +75,11 @@
         <!-- Contraseña -->
         <div class="mb-4">
           <label for="password" class="form-label">Contraseña</label>
-          <input
-            type="password"
-            id="password"
-            formControlName="password"
-            class="form-control"
-            required
-            minlength="8"
+          <input type="password" id="password" formControlName="password" class="form-control" required minlength="8"
             [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
-            [class.is-valid]="registerForm.get('password')?.valid && registerForm.get('password')?.touched"
-          />
-          <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="invalid-feedback">
+            [class.is-valid]="registerForm.get('password')?.valid && registerForm.get('password')?.touched" />
+          <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+            class="invalid-feedback">
             La contraseña debe tener al menos 8 caracteres, números, mayúsculas, minúsculas y caracter especial.
           </div>
         </div>

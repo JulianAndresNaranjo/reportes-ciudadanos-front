@@ -19,6 +19,10 @@ export class LoginComponent {
   onSubmit() {
     if (this.email && this.password) {
       console.log('Iniciando sesión con', this.email);
+
+
+
+      
       /**
        * Si inicia sesion correctamente se guarda el token y se redirige al home
        * si no se valida si es por inactivacion o usuario no existe, manejar bien la promesa
