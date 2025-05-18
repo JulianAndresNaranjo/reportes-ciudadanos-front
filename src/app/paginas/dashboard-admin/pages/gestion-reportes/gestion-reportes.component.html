@@ -1,0 +1,40 @@
+<div class="reportes-container">
+  <h2>📋 Gestión de Reportes</h2>
+
+  <div *ngIf="cargando" class="loader">Cargando reportes...</div>
+
+  <table *ngIf="!cargando && reportes.length" class="tabla-reportes">
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Categoría</th>
+        <th>Descripción</th>
+        <th>Cliente</th>
+        <th>Fecha</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let rep of reportes">
+        <td>{{ rep.titulo }}</td>
+        <td>{{ rep.nombreCategoria }}</td>
+        <td class="descripcion">{{ rep.descripcion }}</td>
+        <td>{{ rep.nombreCliente || '—' }}</td>
+        <td>{{ rep.fecha | date:'short' }}</td>
+        <td>
+          <select [formControl]="estadoSeleccionado[rep.id]">
+            <option *ngFor="let est of estadosDisponibles" [value]="est">{{ est }}</option>
+          </select>
+        </td>
+        <td>
+          <button (click)="actualizarEstado(rep.id)">💾 Guardar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!cargando && reportes.length === 0" class="no-result">
+    No hay reportes para mostrar.
+  </div>
+</div>

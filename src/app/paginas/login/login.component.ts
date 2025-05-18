@@ -17,25 +17,41 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router) { }
 
   onSubmit() {
-    if (this.email && this.password) {
-      console.log('Iniciando sesión con', this.email);
+  if (this.email && this.password) {
+    console.log('Iniciando sesión con', this.email);
 
+    const data = {
+      email: this.email,
+      password: this.password
+    };
 
+    this.authService.login(data).subscribe(
+      (response: any) => {
+        const token = response.token;
+        if (token) {
+          // Decodificar el payload del JWT
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          const rol = payload.rol; // Asegúrate que el backend pone el rol en el payload
 
-      
-      /**
-       * Si inicia sesion correctamente se guarda el token y se redirige al home
-       * si no se valida si es por inactivacion o usuario no existe, manejar bien la promesa
-       */
-      // Redirige al home, dashboard de control de reporte
-      const fakeToken = 'eyJhbGciOi...';  // esto lo retorna el backend
+          console.log('Rol del usuario:', rol);
+          localStorage.setItem('token', token);
+          localStorage.setItem('rol', rol);
 
-      // Guardar el token en sessionStorage
-      this.authService.login(fakeToken);
-      this.router.navigate(['/home']);
-    } else {
-      alert('Completa todos los campos.');
-    }
+          if (rol === 'ROLE_ADMINISTRADOR') {
+            this.router.navigate(['/dashboard-admin']);
+          } else {
+            this.router.navigate(['/home']);
+          }
+        } else {
+          alert('No se recibió un token válido.');
+        }
+      },
+      error => {
+        alert('Error al iniciar sesión. Verifica tus credenciales.');
+      }
+    );
+  } else {
+    alert('Completa todos los campos.');
   }
-
+}
 }

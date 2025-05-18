@@ -1,0 +1,70 @@
+.categoria-container {
+  padding: 30px;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+.categoria-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.categoria-form input,
+.categoria-form select {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  flex: 1;
+  min-width: 200px;
+}
+
+.categoria-form button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.categoria-form button[type="submit"] {
+  background-color: #4caf50;
+  color: white;
+}
+
+.categoria-form .cancelar {
+  background-color: #f44336;
+  color: white;
+}
+
+.loader {
+  font-style: italic;
+  color: #666;
+}
+
+.tabla-categorias {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla-categorias th,
+.tabla-categorias td {
+  border: 1px solid #ccc;
+  padding: 12px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.tabla-categorias th {
+  background-color: #f4f4f4;
+}
+
+.no-result {
+  margin-top: 20px;
+  color: #999;
+  font-style: italic;
+}

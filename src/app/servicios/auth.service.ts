@@ -10,8 +10,13 @@ export class AuthService {
   private baseUrl = 'http://localhost:8080/users/';
   private tokenKey = 'auth_token';
 
-  login(token: string): void {
-    sessionStorage.setItem(this.tokenKey, token);
+ login(data: any):  Observable<any> {
+    return this.http.post(`http://localhost:8080/api/auth/login`, data).pipe(
+      tap((response: any) => {
+        localStorage.setItem('authToken', response.token);
+        console.log('Token almacenado en localStorage:', response.token);
+      })
+    );
   }
 
 

@@ -1,0 +1,63 @@
+<div class="categoria-container">
+  <h2>📁 Gestión de Categorías</h2>
+
+  <form [formGroup]="formulario" (ngSubmit)="guardarCategoria()" class="categoria-form">
+    <input type="text" formControlName="name" placeholder="Nombre de la categoría" />
+     <div class="col-12">
+    <textarea formControlName="description" class="form-control" placeholder="Descripción de la categoría" rows="3"></textarea>
+  </div>
+    <select formControlName="icon">
+      <option value="">Sin icono</option>
+      <optgroup label="Seguridad">
+        <option value="🚔">🚔 Robo o actividad delictiva</option>
+      </optgroup>
+      <optgroup label="Emergencias médicas">
+        <option value="🚑">🚑 Accidente, desmayo</option>
+      </optgroup>
+      <optgroup label="Infraestructura">
+        <option value="🚧">🚧 Vía cerrada, hueco, alumbrado</option>
+      </optgroup>
+      <optgroup label="Mascotas">
+        <option value="🐶">🐶 Mascotas perdidas o encontradas</option>
+      </optgroup>
+      <optgroup label="Comunidad">
+        <option value="🗑️">🗑️ Basura, contaminación</option>
+      </optgroup>
+    </select>
+
+    <button type="submit" [disabled]="formulario.invalid">
+      {{ modoEdicion ? 'Actualizar' : 'Crear' }}
+    </button>
+
+    <button type="button" *ngIf="modoEdicion" (click)="cancelarEdicion()" class="cancelar">
+      Cancelar
+    </button>
+  </form>
+
+  <div *ngIf="cargando" class="loader">Cargando categorías...</div>
+
+  <table *ngIf="!cargando && categorias.length" class="tabla-categorias">
+    <thead>
+      <tr>
+        <th>Icono</th>
+        <th>Nombre</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cat of categorias">
+        <td title="{{ cat.icon }}">{{ cat.icon || '—' }}</td>
+        <td>{{ cat.name }}</td>
+        <td>{{ cat.description}}</td>
+        <td>
+          <button (click)="editarCategoria(cat)">✏️</button>
+          <button (click)="eliminarCategoria(cat)">🗑️</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!cargando && categorias.length === 0" class="no-result">
+    No hay categorías registradas.
+  </div>
+</div>

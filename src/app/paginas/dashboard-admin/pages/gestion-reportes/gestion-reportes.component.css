@@ -1,0 +1,60 @@
+.reportes-container {
+  padding: 30px;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+.loader {
+  font-style: italic;
+  color: #666;
+}
+
+.tabla-reportes {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla-reportes th,
+.tabla-reportes td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.tabla-reportes th {
+  background-color: #f4f4f4;
+}
+
+.tabla-reportes select {
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid #aaa;
+}
+
+.tabla-reportes button {
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.tabla-reportes button:hover {
+  background-color: #1976d2;
+}
+
+.tabla-reportes .descripcion {
+  max-width: 300px;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+.no-result {
+  margin-top: 20px;
+  color: #999;
+  font-style: italic;
+}

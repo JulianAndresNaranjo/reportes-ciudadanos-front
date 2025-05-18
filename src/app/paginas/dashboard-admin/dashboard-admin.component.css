@@ -1,0 +1,82 @@
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+aside {
+  background: #f4f4f4;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  width: 200px;
+  padding: 0rem 1rem 1rem 1rem;
+  transition: width 0.3s ease;
+  z-index: 1000;
+}
+
+aside.collapsed {
+  width: 60px;
+}
+
+aside.collapsed .menu-item span,
+aside.collapsed .logout-btn span {
+  display: none;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  transition: transform 0.3s;
+}
+
+.toggle-btn:hover {
+  transform: rotate(90deg);
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 5px;
+  transition: background 0.3s;
+}
+
+.menu-item:hover {
+  background: #e0e0e0;
+}
+
+.logout-btn {
+  background: #e53935;
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  width: 100%;
+  border-radius: 5px;
+  cursor: pointer;
+  height: 40px;
+  max-width: 200px;
+  margin-top: auto;
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logout-btn:hover {
+  background: #c62828;
+}
+
+main {
+  flex-grow: 1;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
