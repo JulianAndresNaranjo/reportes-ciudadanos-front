@@ -38,7 +38,8 @@ export class GestionCategoriasComponent implements OnInit {
     this.cargando = true;
     this.categoriasService.listar().subscribe({
       next: (data) => {
-        this.categorias = data;
+        console.log('Categorías obtenidas:', data);
+       this.categorias = data;
         console.log('Categorías cargadas:', this.categorias);
         this.cargando = false;
       },

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 export interface Categoria {
   id: string;
@@ -27,10 +27,10 @@ export class CategoriasService {
     });
   }
 
-  listar(): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}`, { headers: this.getHeaders() });
-  }
-
+  listar(): Observable<Categoria[]> {
+  return this.http.get<any>(`${this.baseUrl}`, { headers: this.getHeaders() })
+    .pipe(map(response => response.datos ?? []));
+}
   crear(categoria: any): Observable<any> {
     console.log('Creando categoría:', categoria);
     return this.http.post(this.baseUrl, categoria, { headers: this.getHeaders() });
