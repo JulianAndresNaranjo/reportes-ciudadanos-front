@@ -13,11 +13,22 @@
       <p><strong>⭐ Importantes:</strong> {{ reporte.importantCount ?? 0 }}</p>
       <div *ngIf="reporte.photo">
         <p><strong>🖼 Foto:</strong></p>
-        <img [src]="reporte.photo" alt="Foto del reporte" style="max-width: 100%; border-radius: 10px; margin-top: 1rem;">
+        <img [src]="reporte.photo" alt="Foto del reporte"
+          style="max-width: 100%; border-radius: 10px; margin-top: 1rem;">
       </div>
     </div>
 
-    <!-- Mostrar comentarios -->
+    <!-- Botones de acción justo después de la info -->
+    <div class="acciones-inferiores" *ngIf="reporte.status?.toUpperCase() !== 'RESUELTO'">
+      <button (click)="marcarComoResuelto()" class="btn-resuelto">
+        ✅ Marcar como Resuelto
+      </button>
+      <button (click)="eliminarReporte()" class="btn-eliminar" style="margin-left: 1rem;">
+        🗑 Eliminar Reporte
+      </button>
+    </div>
+
+    <!-- Comentarios -->
     <div class="comentarios-section">
       <h2>🗨️ Comentarios</h2>
       <div *ngIf="comentarios?.length; else sinComentarios">
@@ -27,14 +38,9 @@
             <span class="fecha">{{ comentario.createdAt | date:'short' }}</span>
           </div>
           <p class="mensaje">{{ comentario.message }}</p>
-
-          <!-- Mostrar botón solo si el comentario es del usuario actual -->
           <div *ngIf="comentario.userId === userIdActual">
-            <button (click)="eliminarComentario(comentario.id)" class="btn-eliminar">
-              🗑 Eliminar
-            </button>
+            <button (click)="eliminarComentario(comentario.id)" class="btn-eliminar">🗑 Eliminar</button>
           </div>
-
         </div>
       </div>
       <ng-template #sinComentarios>
@@ -42,7 +48,7 @@
       </ng-template>
     </div>
 
-    <!-- Formulario para agregar un comentario -->
+    <!-- Formulario comentario -->
     <div class="form-comentario">
       <h3>✍️ Agregar Comentario</h3>
       <textarea [(ngModel)]="nuevoComentario" placeholder="Escribe tu comentario..."></textarea>
@@ -51,6 +57,7 @@
         <button (click)="volver()" class="btn-volver">Volver</button>
       </div>
     </div>
+
   </div>
 </ng-container>
 

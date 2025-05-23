@@ -6,6 +6,8 @@ import { CategoriasService } from '../../servicios/categorias.service';
 import { FormsModule } from '@angular/forms';
 import { ComentariosService } from '../../servicios/comentarios.service';
 import { Router } from '@angular/router';
+import { ChangeStatusReportDTO } from '../../servicios/change-status-report.dto';
+
 
 
 @Component({
@@ -116,6 +118,56 @@ eliminarComentario(id: string): void {
     });
   }
 }
+
+marcarComoResuelto(): void {
+  if (!this.reporte?.id) {
+    alert("No se puede cambiar el estado sin ID de reporte.");
+    return;
+  }
+
+  const confirmacion = confirm("¿Estás seguro de marcar este reporte como RESUELTO?");
+  if (!confirmacion) return;
+
+  const cambio: ChangeStatusReportDTO = {
+    id: this.reporte.id,
+    status: "RESUELTO",
+    observation: "El usuario marcó este reporte como resuelto."
+  };
+
+  this.reportesService.cambiarEstadoReporte(cambio).subscribe({
+    next: (respuesta) => {
+      alert("Reporte actualizado con éxito.");
+      this.reporte.status = "RESUELTO";
+    },
+    error: (err) => {
+      console.error("Error al cambiar estado:", err);
+      alert("Hubo un error al actualizar el reporte.");
+    }
+  });
+}
+
+eliminarReporte(): void {
+  if (!this.reporte?.id) {
+    alert("No se puede cambiar el estado sin ID de reporte.");
+    return;
+  }
+
+  const confirmacion = confirm("¿Estás seguro de marcar este reporte como ELIMINADO? Esta acción no se puede deshacer.");
+  if (!confirmacion) return;
+
+  this.reportesService.eliminarReporte(this.reporte.id).subscribe({
+    next: () => {
+      alert("Reporte marcado como eliminado con éxito.");
+      this.router.navigate(['/home']);
+    },
+    error: (err) => {
+      console.error("Error al cambiar estado a ELIMINADO:", err);
+      alert("Hubo un error al actualizar el reporte.");
+    }
+  });
+}
+
+
 
 volver(): void {
     this.router.navigate(['/home']); // Cambia esta ruta si quieres otro destino

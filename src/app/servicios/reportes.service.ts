@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { RespuestaDTO } from '../dto/respuesta-dto'; // Asegúrate de que esta ruta sea correcta
+import { ChangeStatusReportDTO } from './change-status-report.dto';
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -76,4 +79,22 @@ export class ReportesService {
       Authorization: `Bearer ${token}`
     });
   }
+
+  cambiarEstadoReporte(cambio: ChangeStatusReportDTO): Observable<any> {
+  const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  });
+
+  
+
+  return this.http.patch(`${this.reportesURL}/status`, cambio, { headers });
+}
+
+eliminarReporte(id: string): Observable<any> {
+  return this.http.delete(`${this.reportesURL}/reportes?id=${id}`);
+}
+
+
 }
