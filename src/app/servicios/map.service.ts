@@ -47,6 +47,11 @@ export class MapService {
  }
  pintarMarcadores(reportes: any[]) {
   reportes.forEach(reporte => {
+    if (!reporte.location || reporte.location.longitude == null || reporte.location.latitude == null) {
+      console.warn('Reporte sin ubicación válida:', reporte);
+      return;
+    }
+
     const popupHtml = `
       <strong>${reporte.titulo}</strong><br>
       <em>${reporte.descripcion}</em><br>
@@ -56,9 +61,10 @@ export class MapService {
     `;
 
     new mapboxgl.Marker({ color: 'red' })
-      .setLngLat([reporte.ubicacion.longitud, reporte.ubicacion.latitud])
+      .setLngLat([reporte.location.longitude, reporte.location.latitude])
       .setPopup(new mapboxgl.Popup().setHTML(popupHtml))
       .addTo(this.mapa);
-  });
-}
+    });
+  }
+
 }

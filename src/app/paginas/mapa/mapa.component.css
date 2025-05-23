@@ -1,0 +1,7 @@
+#mapa {
+  width: 300px;          /* ancho fijo */
+  height: 300px;         /* altura fija */
+  border-radius: 10px;
+  margin: 0 auto;        /* esto centra horizontalmente */
+  display: block;        /* para que margin auto funcione bien */
+}

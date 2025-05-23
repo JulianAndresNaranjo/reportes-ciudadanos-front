@@ -8,10 +8,17 @@
         </a>
 
       </li>
+      <li class="nav-item">
+
+        <a class="nav-link" (click)="logout()">
+          <i class="fa-solid fa-right-to-bracket"></i> Logout
+        </a>
+
+      </li>
     </ul>
   </div>
 </nav>
 
 <div class="container mt-5 pt-5">
+   <router-outlet></router-outlet>
 </div>
- <router-outlet></router-outlet>

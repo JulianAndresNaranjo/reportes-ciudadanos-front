@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MapService } from '../../servicios/map.service';
 import { Router } from '@angular/router';
+import { ReportesService } from '../../servicios/reportes.service'; // <-- Asegúrate de importar esto
+import { AuthService } from '../../servicios/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -9,17 +11,34 @@ import { Router } from '@angular/router';
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit {
+
   constructor(
     private mapaService: MapService,
-    private router: Router
-  ) { }
+    private reportesService: ReportesService,
+    private router: Router,
+    private authService: AuthService,
+  ) {}
 
   ngOnInit(): void {
+    this.authService.verificateSession();
+    this.mapaService.crearMapa();
+    this.getReport();
+
     
-      this.mapaService.crearMapa();
-   
-    // Aquí puedes agregar la lógica que necesites al cargar el componente
   }
 
-  // Puedes agregar métodos adicionales según sea necesario
+  getReport(){
+    this.reportesService.listarTodos().subscribe({
+      next: (reportes) => {
+        this.mapaService.pintarMarcadores(reportes);
+      },
+      error: (err) => {
+        console.error('Error al cargar reportes:', err);
+      }
+    });
+  }
+
+  crearReporte() {
+    this.router.navigate(['/crear-reporte']);
+  }
 }

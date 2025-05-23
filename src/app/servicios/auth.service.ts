@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Route, Router } from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,private router:Router) { }
   private baseUrl = 'http://localhost:8080/users/';
   private tokenKey = 'auth_token';
 
@@ -24,6 +25,23 @@ export class AuthService {
 
   logout(): void {
     sessionStorage.removeItem(this.tokenKey);
+  }
+
+  delay(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+ }
+
+  verificateSession(){
+    this.delay(500);
+    const rol = localStorage.getItem('rol');
+    console.log(rol)
+    if (rol === 'ROLE_ADMINISTRADOR') {
+      this.router.navigate(['/dashboard-admin']);
+    } else if ( rol === 'ROLE_CLIENTE') {
+      this.router.navigate(['/home']);
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 
   isAuthenticated(): boolean {

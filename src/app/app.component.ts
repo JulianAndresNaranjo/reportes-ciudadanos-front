@@ -16,11 +16,18 @@ import { FormsModule } from '@angular/forms';
 export class AppComponent {
   title = 'my-report';
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService,private router:Router) {
+    
 
   }
 
   get isAuthenticated() {
     return this.authService.isAuthenticated();
+  }
+
+  logout(){
+    localStorage.setItem('token', '');
+    localStorage.setItem('rol', '');
+    this.router.navigate(['/login']);
   }
 }

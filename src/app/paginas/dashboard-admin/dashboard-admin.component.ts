@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../servicios/auth.service';
@@ -11,13 +11,16 @@ import { AuthService } from '../../servicios/auth.service';
   templateUrl: './dashboard-admin.component.html',
   styleUrl: './dashboard-admin.component.css'
 })
-export class DashboardAdminComponent {
+export class DashboardAdminComponent implements OnInit{
   menuAbierto = false;
 
   constructor(
     private router: Router,
     private authService: AuthService
   ) {}
+  ngOnInit(): void {
+    this.authService.verificateSession();
+  }
 
   toggleMenu() {
     this.menuAbierto = !this.menuAbierto;
@@ -27,6 +30,9 @@ export class DashboardAdminComponent {
     this.router.navigate([ruta]);
   }
 
+  
+
 
 }
+
 
