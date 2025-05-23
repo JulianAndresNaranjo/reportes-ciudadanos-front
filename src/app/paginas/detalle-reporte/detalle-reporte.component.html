@@ -1,16 +1,58 @@
-<div class="reporte-detalle-container" *ngIf="reporte; else cargando">
-  <h1 class="titulo">{{ reporte.title }}</h1>
+<ng-container *ngIf="reporte; else cargando">
+  <div class="reporte-detalle-container">
+    <h1 class="titulo">{{ reporte.title }}</h1>
 
-  <div class="info">
-    <p><strong>📝 Descripción:</strong> {{ reporte.description }}</p>
-    <p><strong>📂 Categoría:</strong> {{ nombreCategoria }}</p>
-    <p><strong>📍 Ubicación:</strong> 
-      {{ reporte.location?.latitude ?? '—' }}, 
-      {{ reporte.location?.longitude ?? '—' }}
-    </p>
-    <p><strong>📌 Estado:</strong> {{ reporte.status ?? 'Sin estado' }}</p>
+    <div class="info">
+      <p><strong>📝 Descripción:</strong> {{ reporte.description }}</p>
+      <p><strong>📂 Categoría:</strong> {{ nombreCategoria }}</p>
+      <p><strong>📍 Ubicación:</strong>
+        {{ reporte.location?.latitude ?? '—' }}, {{ reporte.location?.longitude ?? '—' }}
+      </p>
+      <p><strong>📌 Estado:</strong> {{ reporte.status ?? 'Sin estado' }}</p>
+      <p><strong>📅 Fecha:</strong> {{ reporte.dateCreation ?? 'Sin fecha' }}</p>
+      <p><strong>⭐ Importantes:</strong> {{ reporte.importantCount ?? 0 }}</p>
+      <div *ngIf="reporte.photo">
+        <p><strong>🖼 Foto:</strong></p>
+        <img [src]="reporte.photo" alt="Foto del reporte" style="max-width: 100%; border-radius: 10px; margin-top: 1rem;">
+      </div>
+    </div>
+
+    <!-- Mostrar comentarios -->
+    <div class="comentarios-section">
+      <h2>🗨️ Comentarios</h2>
+      <div *ngIf="comentarios?.length; else sinComentarios">
+        <div *ngFor="let comentario of comentarios" class="comentario">
+          <div class="comentario-header">
+            <span class="usuario">🧑 Usuario: {{ comentario.userName }}</span>
+            <span class="fecha">{{ comentario.createdAt | date:'short' }}</span>
+          </div>
+          <p class="mensaje">{{ comentario.message }}</p>
+
+          <!-- Mostrar botón solo si el comentario es del usuario actual -->
+          <div *ngIf="comentario.userId === userIdActual">
+            <button (click)="eliminarComentario(comentario.id)" class="btn-eliminar">
+              🗑 Eliminar
+            </button>
+          </div>
+
+        </div>
+      </div>
+      <ng-template #sinComentarios>
+        <p class="sin-comentarios">No hay comentarios todavía.</p>
+      </ng-template>
+    </div>
+
+    <!-- Formulario para agregar un comentario -->
+    <div class="form-comentario">
+      <h3>✍️ Agregar Comentario</h3>
+      <textarea [(ngModel)]="nuevoComentario" placeholder="Escribe tu comentario..."></textarea>
+      <div class="botones-accion">
+        <button (click)="agregarComentario()">Enviar</button>
+        <button (click)="volver()" class="btn-volver">Volver</button>
+      </div>
+    </div>
   </div>
-</div>
+</ng-container>
 
 <ng-template #cargando>
   <div class="cargando">

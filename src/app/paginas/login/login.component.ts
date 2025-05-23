@@ -26,30 +26,33 @@ export class LoginComponent {
     };
 
     this.authService.login(data).subscribe(
-      (response: any) => {
-        const token = response.token;
-        if (token) {
-          // Decodificar el payload del JWT
-          const payload = JSON.parse(atob(token.split('.')[1]));
-          const rol = payload.rol; // Asegúrate que el backend pone el rol en el payload
+  (response: any) => {
+    const token = response.token;
+    if (token) {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const rol = payload.rol;
+      const userId = payload.sub; // 👈 o payload.id si así lo maneja tu backend
 
-          console.log('Rol del usuario:', rol);
-          localStorage.setItem('token', token);
-          localStorage.setItem('rol', rol);
+      console.log('Rol:', rol, 'ID:', userId);
 
-          if (rol === 'ROLE_ADMINISTRADOR') {
-            this.router.navigate(['/dashboard-admin']);
-          } else {
-            this.router.navigate(['/home']);
-          }
-        } else {
-          alert('No se recibió un token válido.');
-        }
-      },
-      error => {
-        alert('Error al iniciar sesión. Verifica tus credenciales.');
+      localStorage.setItem('token', token);
+      localStorage.setItem('rol', rol);
+      localStorage.setItem('userId', userId); // ✅ Necesario para comentarios
+
+      if (rol === 'ROLE_ADMINISTRADOR') {
+        this.router.navigate(['/dashboard-admin']);
+      } else {
+        this.router.navigate(['/home']);
       }
-    );
+    } else {
+      alert('No se recibió un token válido.');
+    }
+  },
+  error => {
+    alert('Error al iniciar sesión. Verifica tus credenciales.');
+  }
+);
+
   } else {
     alert('Completa todos los campos.');
   }

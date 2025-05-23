@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Route, Router } from '@angular/router';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -76,4 +77,6 @@ export class AuthService {
   verifyCode(code: any ): Observable<any> {
    return  this.http.put(`${this.baseUrl}verifyAccountEmailCode`, code);
   }
+
+  
 }
