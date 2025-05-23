@@ -44,15 +44,36 @@ export class ReportesService {
   }
 
   public listarTodos(): Observable<any[]> {
-  const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+    const token = localStorage.getItem('token') || localStorage.getItem('authToken');
 
-  let headers = new HttpHeaders();
-  if (token) {
-    headers = headers.set('Authorization', `Bearer ${token}`);
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    return this.http.get<any[]>(`${this.reportesURL}/all`, { headers });
+
   }
 
-  return this.http.get<any[]>(`${this.reportesURL}/all`, { headers });
-  
+  public obtenerPorId(id: string): Observable<any> {
+    const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+    return this.http.get<any>(`${this.reportesURL}?id=${id}`, { headers });
   }
 
+  getCategoriaById(id: string) {
+    return this.http.get<any>(`http://localhost:8080/categories/id/${id}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+  }
 }

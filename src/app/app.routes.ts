@@ -8,6 +8,7 @@ import { DashboardAdminComponent } from './paginas/dashboard-admin/dashboard-adm
 import { GestionReportesComponent } from './paginas/dashboard-admin/pages/gestion-reportes/gestion-reportes.component';
 import { GestionCategoriasComponent } from './paginas/dashboard-admin/pages/gestion-categorias/gestion-categorias.component';
 import { AdminInicioComponent } from './paginas/dashboard-admin/pages/admin-inicio/admin-inicio.component';
+import { DetalleReporteComponent } from './paginas/detalle-reporte/detalle-reporte.component';
 
 
 export const routes: Routes = [
@@ -17,8 +18,9 @@ export const routes: Routes = [
    { path: 'crear-reporte', component: CrearReporteComponent},
    { path: 'verificacion-cuenta', component: VerificacionCuentaComponent},
    { path: 'home', component: HomeComponent},
+    { path: 'dashboard/reportes/detalle/:id', component: DetalleReporteComponent },
    {path: 'dashboard-admin',
-    component: DashboardAdminComponent,
+component: DashboardAdminComponent,
     children: [
       { path: '', component: AdminInicioComponent },
       { path: 'categorias', component: GestionCategoriasComponent },

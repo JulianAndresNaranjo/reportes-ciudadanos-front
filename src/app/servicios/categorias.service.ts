@@ -19,18 +19,28 @@ export class CategoriasService {
   constructor(private http: HttpClient) {}
 
   private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
-    console.log('Token desde localStorage:', token);
+    const token = localStorage.getItem('token') || localStorage.getItem('authToken');
     return new HttpHeaders({
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
   }
 
+  // Método principal que ya tienes funcionando
   listar(): Observable<Categoria[]> {
-  return this.http.get<any>(`${this.baseUrl}`, { headers: this.getHeaders() })
-    .pipe(map(response => response.datos ?? []));
-}
+    return this.http.get<any>(`${this.baseUrl}`, { headers: this.getHeaders() })
+      .pipe(map(response => response.datos ?? []));
+  }
+
+  // Alias para mantener compatibilidad con código existente
+  listarTodas(): Observable<Categoria[]> {
+    return this.listar();
+  }
+
+  obtenerPorId(id: string): Observable<any> {
+  return this.http.get<any>(`${this.baseUrl}/id/${id}`, { headers: this.getHeaders() });
+  }
+
   crear(categoria: any): Observable<any> {
     console.log('Creando categoría:', categoria);
     return this.http.post(this.baseUrl, categoria, { headers: this.getHeaders() });

@@ -27,16 +27,38 @@ export class HomeComponent implements OnInit {
     
   }
 
-  getReport(){
-    this.reportesService.listarTodos().subscribe({
-      next: (reportes) => {
-        this.mapaService.pintarMarcadores(reportes);
-      },
-      error: (err) => {
-        console.error('Error al cargar reportes:', err);
-      }
-    });
-  }
+  getReport() {
+  this.reportesService.listarTodos().subscribe({
+    next: (reportes) => {
+      // Cargar nombres de categoría por separado
+      const reportesConCategoria = reportes.map(async (reporte) => {
+        if (reporte.categoryId) {
+          try {
+            const categoria = await this.reportesService
+              .getCategoriaById(reporte.categoryId)
+              .toPromise();
+            reporte.nombreCategoria = categoria.datos?.name || categoria.name || 'No asignada';
+          } catch (err) {
+            console.warn(`Error al cargar categoría del reporte ${reporte.id}`, err);
+            reporte.nombreCategoria = 'Error al cargar';
+          }
+        } else {
+          reporte.nombreCategoria = 'No asignada';
+        }
+        return reporte;
+      });
+
+      // Esperar a que todos los reportes tengan su nombre de categoría antes de pintar
+      Promise.all(reportesConCategoria).then((completos) => {
+        this.mapaService.pintarMarcadores(completos);
+      });
+    },
+    error: (err) => {
+      console.error('Error al cargar reportes:', err);
+    }
+  });
+}
+
 
   crearReporte() {
     this.router.navigate(['/crear-reporte']);
