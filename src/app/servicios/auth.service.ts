@@ -1,12 +1,34 @@
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Route, Router } from '@angular/router';
-
+export interface usuario {
+  id: string;
+  name: string;
+  icon: string;
+  description: string;
+}
+export interface Usuario {
+  id: string;
+  documentNumber: string;
+  name: string;
+  residenceCity: string;
+  email: string;
+  phone: string;
+  address: string;
+  password: string;
+  userType: string;
+  enumUserStatus: string;
+  followers: any[]; // puedes tiparlo mejor si sabes su estructura
+  score: number;
+  createdAt: string;
+  codeValidation: string | null;
+}
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  
 
   constructor(private http: HttpClient,private router:Router) { }
   private baseUrl = 'http://localhost:8080/users/';
@@ -20,7 +42,27 @@ export class AuthService {
       })
     );
   }
+   private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+  }
 
+ listarUsuarios(): Observable<Usuario[]> {
+  return this.http.get<any>(`${this.baseUrl}`, { headers: this.getHeaders() })
+    .pipe(
+      map(response => {
+        if (response && response.datos) {
+          return response.datos as Usuario[];
+        } else {
+          console.warn('La respuesta del backend no tiene "datos":', response);
+          return [];
+        }
+      })
+    );
+}
 
   
 

@@ -17,11 +17,11 @@
     </thead>
     <tbody>
       <tr *ngFor="let rep of reportes">
-        <td>{{ rep.titulo }}</td>
+        <td>{{ rep.title }}</td>
         <td>{{ rep.nombreCategoria }}</td>
-        <td class="descripcion">{{ rep.descripcion }}</td>
+        <td class="descripcion">{{ rep.description }}</td>
         <td>{{ rep.nombreCliente || '—' }}</td>
-        <td>{{ rep.fecha | date:'short' }}</td>
+        <td>{{ rep.dateCreation | date:'short' }}</td>
         <td>
           <select [formControl]="estadoSeleccionado[rep.id]">
             <option *ngFor="let est of estadosDisponibles" [value]="est">{{ est }}</option>
