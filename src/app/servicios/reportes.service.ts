@@ -93,8 +93,16 @@ export class ReportesService {
 }
 
 eliminarReporte(id: string): Observable<any> {
-  return this.http.delete(`${this.reportesURL}/reportes?id=${id}`);
+  const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+
+  let headers = new HttpHeaders();
+  if (token) {
+    headers = headers.set('Authorization', `Bearer ${token}`);
+  }
+
+  return this.http.delete(`${this.reportesURL}?id=${id}`, { headers });
 }
+
 
 
 }
