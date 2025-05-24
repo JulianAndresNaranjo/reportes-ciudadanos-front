@@ -8,6 +8,8 @@ import { CategoriasService } from '../../servicios/categorias.service';
 import { ComentariosService } from '../../servicios/comentarios.service';
 import { ChangeStatusReportDTO } from '../../servicios/change-status-report.dto';
 
+import Swal from 'sweetalert2';  // <-- Importar SweetAlert2
+
 @Component({
   selector: 'app-detalle-reporte',
   standalone: true,
@@ -22,6 +24,7 @@ export class DetalleReporteComponent implements OnInit {
   comentarios: any[] = [];
   nuevoComentario: string = '';
   userIdActual: string | null = null;
+  comentarioCargando: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -74,88 +77,189 @@ export class DetalleReporteComponent implements OnInit {
   }
 
   agregarComentario(): void {
-    const userId = localStorage.getItem('userId');
-    const mensaje = this.nuevoComentario.trim();
+  const userId = localStorage.getItem('userId');
+  const mensaje = this.nuevoComentario.trim();
 
-    if (!userId || !mensaje) {
-      alert('El comentario no puede estar vacío');
-      return;
+  if (!userId || !mensaje) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Comentario vacío',
+      text: 'El comentario no puede estar vacío',
+      confirmButtonColor: '#f39c12'
+    });
+    return;
+  }
+
+  const comentario = {
+    message: mensaje,
+    userId: userId,
+    reportId: this.reporte.id
+  };
+
+  this.comentarioCargando = true; // Activa spinner
+
+  this.comentariosService.crearComentario(comentario).subscribe({
+    next: () => {
+      this.nuevoComentario = '';
+      this.cargarComentarios();
+      this.comentarioCargando = false; // Desactiva spinner
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Comentario agregado',
+        text: 'Tu comentario se ha enviado correctamente.',
+        timer: 1500,
+        showConfirmButton: false
+      });
+    },
+    error: (err) => {
+      console.error('Error al agregar comentario:', err);
+      this.comentarioCargando = false; // Desactiva spinner
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error al enviar el comentario',
+        confirmButtonColor: '#d33'
+      });
     }
+  });
+}
 
-    const comentario = {
-      message: mensaje,
-      userId: userId,
-      reportId: this.reporte.id
-    };
 
-    this.comentariosService.crearComentario(comentario).subscribe({
-      next: () => {
-        this.nuevoComentario = '';
-        this.cargarComentarios();
-      },
-      error: (err) => {
-        console.error('Error al agregar comentario:', err);
-        alert('Error al enviar el comentario');
+  eliminarComentario(id: string): void {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "No podrás revertir esta acción.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.comentariosService.eliminarComentario(id).subscribe({
+          next: () => {
+            this.cargarComentarios();
+            Swal.fire({
+              icon: 'success',
+              title: 'Eliminado',
+              text: 'Comentario eliminado correctamente',
+              timer: 1500,
+              showConfirmButton: false
+            });
+          },
+          error: (err) => {
+            console.error('Error al eliminar comentario:', err);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Error al eliminar el comentario',
+              confirmButtonColor: '#d33'
+            });
+          }
+        });
       }
     });
   }
 
-  eliminarComentario(id: string): void {
-    if (confirm('¿Estás seguro de eliminar este comentario?')) {
-      this.comentariosService.eliminarComentario(id).subscribe({
-        next: () => {
-          this.cargarComentarios();
-        },
-        error: (err) => {
-          console.error('Error al eliminar comentario:', err);
-          alert('Error al eliminar el comentario');
-        }
-      });
-    }
-  }
-
   marcarComoResuelto(): void {
     if (!this.reporte?.id) {
-      alert("No se puede cambiar el estado sin ID de reporte.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se puede cambiar el estado sin ID de reporte.',
+        confirmButtonColor: '#d33'
+      });
       return;
     }
 
-    if (!confirm("¿Estás seguro de marcar este reporte como RESUELTO?")) return;
+    Swal.fire({
+      title: '¿Estás seguro de marcar este reporte como RESUELTO?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#2ecc71',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, marcar como resuelto',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const cambio: ChangeStatusReportDTO = {
+          id: this.reporte.id,
+          status: "RESUELTO",
+          observation: "El usuario marcó este reporte como resuelto."
+        };
 
-    const cambio: ChangeStatusReportDTO = {
-      id: this.reporte.id,
-      status: "RESUELTO",
-      observation: "El usuario marcó este reporte como resuelto."
-    };
-
-    this.reportesService.cambiarEstadoReporte(cambio).subscribe({
-      next: () => {
-        alert("Reporte actualizado con éxito.");
-        this.reporte.status = "RESUELTO";
-      },
-      error: (err) => {
-        console.error("Error al cambiar estado:", err);
-        alert("Hubo un error al actualizar el reporte.");
+        this.reportesService.cambiarEstadoReporte(cambio).subscribe({
+          next: () => {
+            this.reporte.status = "RESUELTO";
+            Swal.fire({
+              icon: 'success',
+              title: 'Reporte actualizado',
+              text: 'Reporte marcado como resuelto exitosamente.',
+              timer: 1500,
+              showConfirmButton: false
+            });
+          },
+          error: (err) => {
+            console.error("Error al cambiar estado:", err);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Hubo un error al actualizar el reporte.',
+              confirmButtonColor: '#d33'
+            });
+          }
+        });
       }
     });
   }
 
   eliminarReporte(): void {
     if (!this.reporte?.id) {
-      alert("No se puede eliminar sin ID de reporte.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se puede eliminar sin ID de reporte.',
+        confirmButtonColor: '#d33'
+      });
       return;
     }
 
-    if (!confirm("¿Estás seguro de eliminar este reporte? Esta acción no se puede deshacer.")) return;
-
-    this.reportesService.eliminarReporte(this.reporte.id).subscribe({
-      next: () => {
-        alert("Reporte eliminado con éxito.");
-        this.router.navigate(['/home']);
-      },
-      error: (err) => {
-        console.error("Error al eliminar reporte:", err);
-        alert("Hubo un error al eliminar el reporte.");
+    Swal.fire({
+      title: '¿Estás seguro de eliminar este reporte?',
+      text: "Esta acción no se puede deshacer.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.reportesService.eliminarReporte(this.reporte.id).subscribe({
+          next: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Reporte eliminado',
+              text: 'Reporte eliminado con éxito.',
+              timer: 1500,
+              showConfirmButton: false
+            }).then(() => {
+              this.router.navigate(['/home']);
+            });
+          },
+          error: (err) => {
+            console.error("Error al eliminar reporte:", err);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Hubo un error al eliminar el reporte.',
+              confirmButtonColor: '#d33'
+            });
+          }
+        });
       }
     });
   }

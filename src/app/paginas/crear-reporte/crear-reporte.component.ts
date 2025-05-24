@@ -25,6 +25,7 @@ export class CrearReporteComponent implements OnInit {
   descripcion: string = '';
   imagenSeleccionada: File | null = null;
   imagenPreview: string | null = null;
+  isImportant: boolean = false;
 
   ubicacion: {
     latitude: number;
@@ -101,17 +102,19 @@ export class CrearReporteComponent implements OnInit {
     }
 
     const createReportDTO: CrearReporteDTO = {
-      description: this.descripcion.trim(),
-      userId: userId,
-      title: this.titulo.trim(),
-      categoryId: categoriaSeleccionada.id,
-      location: {
-        latitude: this.ubicacion.latitude,
-        longitude: this.ubicacion.longitude,
-        name: this.ubicacion.name || '',
-        description: this.ubicacion.description || ''
-      }
-    };
+  description: this.descripcion.trim(),
+  userId: userId,
+  title: this.titulo.trim(),
+  categoryId: categoriaSeleccionada.id,
+  isImportant: this.isImportant,   // <-- nuevo campo aquí
+  location: {
+    latitude: this.ubicacion.latitude,
+    longitude: this.ubicacion.longitude,
+    name: this.ubicacion.name || '',
+    description: this.ubicacion.description || ''
+  }
+};
+
 
     const formData = new FormData();
     formData.append('createReportDTO', JSON.stringify(createReportDTO));

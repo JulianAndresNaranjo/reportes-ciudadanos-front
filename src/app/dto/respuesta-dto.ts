@@ -10,7 +10,8 @@ export interface CrearReporteDTO {
   userId: string;
   title: string;
   categoryId: string;
-  location: LocationDTO; // Asegúrate de que location sea un objeto
+  location: LocationDTO;
+  isImportant?: boolean;  // <-- agregar este campo opcional
 }
 
 export interface RespuestaDTO {

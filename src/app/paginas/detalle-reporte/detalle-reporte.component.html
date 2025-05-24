@@ -10,7 +10,11 @@
       </p>
       <p><strong>📌 Estado:</strong> {{ reporte.status ?? 'Sin estado' }}</p>
       <p><strong>📅 Fecha:</strong> {{ reporte.dateCreation ?? 'Sin fecha' }}</p>
-      <p><strong>⭐ Importantes:</strong> {{ reporte.importantCount ?? 0 }}</p>
+      <p><strong>⭐ Importante:</strong>
+        <span *ngIf="reporte.isImportant; else noImportante"> Sí</span>
+        <ng-template #noImportante> No</ng-template>
+      </p>
+
       <div *ngIf="reporte.photo">
         <p><strong>🖼 Foto:</strong></p>
         <img [src]="reporte.photo" alt="Foto del reporte"
@@ -18,7 +22,7 @@
       </div>
     </div>
 
-    <!-- Botones de acción justo después de la info -->
+    <!-- Botones de acción -->
     <div class="acciones-inferiores" *ngIf="reporte.status?.toUpperCase() !== 'RESUELTO'">
       <button (click)="marcarComoResuelto()" class="btn-resuelto">
         ✅ Marcar como Resuelto
@@ -53,7 +57,14 @@
       <h3>✍️ Agregar Comentario</h3>
       <textarea [(ngModel)]="nuevoComentario" placeholder="Escribe tu comentario..."></textarea>
       <div class="botones-accion">
-        <button (click)="agregarComentario()">Enviar</button>
+        <button (click)="agregarComentario()" [disabled]="comentarioCargando || !nuevoComentario.trim()">
+          <ng-container *ngIf="!comentarioCargando; else cargandoBtn">
+            Enviar
+          </ng-container>
+          <ng-template #cargandoBtn>
+            <span class="spinner"></span> Enviando
+          </ng-template>
+        </button>
         <button (click)="volver()" class="btn-volver">Volver</button>
       </div>
     </div>

@@ -62,12 +62,15 @@ export class MapService {
         <a href="/dashboard/reportes/detalle/${reporte.id}" target="_self" style="color: #007bff; text-decoration: underline;">📄 Ver detalles</a>
       `;
 
-      new mapboxgl.Marker({ color: 'red' })
+      const color = reporte.isImportant ? 'orange' : 'red';
+
+      new mapboxgl.Marker({ color })
         .setLngLat([reporte.location.longitude, reporte.location.latitude])
         .setPopup(new mapboxgl.Popup().setHTML(popupHtml))
         .addTo(this.mapa);
     });
 }
+
 
 
 }

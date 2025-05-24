@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit {
   getReport() {
   this.reportesService.listarTodos().subscribe({
     next: (reportes) => {
-      // Cargar nombres de categoría por separado
+      console.log('Reporte recibido:', reportes);
       const reportesConCategoria = reportes.map(async (reporte) => {
         if (reporte.categoryId) {
           try {
