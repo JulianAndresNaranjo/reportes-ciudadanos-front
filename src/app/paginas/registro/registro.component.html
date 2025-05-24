@@ -74,15 +74,35 @@
 
         <!-- Contraseña -->
         <div class="mb-4">
-          <label for="password" class="form-label">Contraseña</label>
-          <input type="password" id="password" formControlName="password" class="form-control" required minlength="8"
-            [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
-            [class.is-valid]="registerForm.get('password')?.valid && registerForm.get('password')?.touched" />
-          <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
-            class="invalid-feedback">
-            La contraseña debe tener al menos 8 caracteres, números, mayúsculas, minúsculas y caracter especial.
-          </div>
-        </div>
+  <label for="password" class="form-label">Contraseña</label>
+  <div class="input-group">
+    <input
+      [type]="verPassword ? 'text' : 'password'"
+      id="password"
+      formControlName="password"
+      class="form-control"
+      required
+      minlength="8"
+      [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+      [class.is-valid]="registerForm.get('password')?.valid && registerForm.get('password')?.touched"
+    />
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="verPassword = !verPassword"
+      tabindex="-1"
+    >
+      <i [class]="verPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+    </button>
+  </div>
+  <div
+    *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+    class="invalid-feedback"
+  >
+    La contraseña debe tener al menos 8 caracteres, números, mayúsculas, minúsculas y caracter especial.
+  </div>
+</div>
+
 
         <button type="submit" class="btn btn-primary w-100" [disabled]="registerForm.invalid">Registrarse</button>
       </form>

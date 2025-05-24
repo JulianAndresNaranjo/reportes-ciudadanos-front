@@ -84,7 +84,24 @@ export class VerificacionCuentaComponent {
 
   reenviarCodigo() {
     console.log('Reenviar código solicitado');
-    // Aquí puedes colocar la lógica para reenviar el código
+    const correo = localStorage.getItem('correoUsuario');
+    if (correo) {
+      this.authservice.senCodeConfirmation(correo);
+       Swal.fire({
+                icon: 'success',
+                title: '¡Envio codigo existoso!',
+                text: 'El codigo se ha enviado nuevamente.',
+                confirmButtonColor: '#3085d6'
+              });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se encontró el correo del usuario en el almacenamiento local.',
+        confirmButtonColor: '#d33'
+      });
+    }
+
   }
 }
 

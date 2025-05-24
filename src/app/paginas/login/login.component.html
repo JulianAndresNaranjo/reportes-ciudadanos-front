@@ -16,14 +16,24 @@
         </div>
         <div class="mb-3">
           <label for="password" class="form-label">Contraseña</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            class="form-control"
-            required
-            [(ngModel)]="password"
-          />
+<div class="input-group">
+  <input
+    [type]="verPassword ? 'text' : 'password'"
+    id="password"
+    name="password"
+    class="form-control"
+    required
+    [(ngModel)]="password"
+  />
+  <button
+    type="button"
+    class="btn btn-outline-secondary"
+    (click)="verPassword = !verPassword"
+    tabindex="-1"
+  >
+    <i [class]="verPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+  </button>
+</div>
         </div>
         <button type="submit" class="btn btn-primary w-100">Ingresar</button>
       </form>

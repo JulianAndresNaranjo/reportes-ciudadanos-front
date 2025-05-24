@@ -20,6 +20,8 @@ export class RegistroComponent implements OnInit {
   showErrorAlert = false;
   errorMessage = '';
   ciudades: string[] = [];
+  verPassword: boolean = false;
+
 
   constructor(private fb: FormBuilder,
     private authservice: AuthService,

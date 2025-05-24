@@ -2,7 +2,13 @@
   <h2>📁 Gestión de Categorías</h2>
 
   <form [formGroup]="formulario" (ngSubmit)="guardarCategoria()" class="categoria-form">
-    <input type="text" formControlName="name" placeholder="Nombre de la categoría" />
+    <input
+  type="text"
+  formControlName="name"
+  placeholder="Nombre de la categoría"
+  [readonly]="modoEdicion"
+/>
+
      <div class="col-12">
     <textarea formControlName="description" class="form-control" placeholder="Descripción de la categoría" rows="3"></textarea>
   </div>
@@ -40,6 +46,7 @@
     <thead>
       <tr>
         <th>Icono</th>
+        <th>Nombre</th>
         <th>Nombre</th>
         <th>Acciones</th>
       </tr>

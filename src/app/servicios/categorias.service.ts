@@ -26,11 +26,20 @@ export class CategoriasService {
     });
   }
 
-  // Método principal que ya tienes funcionando
-  listar(): Observable<Categoria[]> {
-    return this.http.get<any>(`${this.baseUrl}`, { headers: this.getHeaders() })
-      .pipe(map(response => response.datos ?? []));
-  }
+listar(): Observable<Categoria[]> {
+  return this.http.get<any>(`${this.baseUrl}`, { headers: this.getHeaders() })
+    .pipe(
+      map(response => {
+        if (response && response.datos) {
+          return response.datos;
+        } else {
+          console.warn('La respuesta del backend no tiene "datos":', response);
+          return [];
+        }
+      })
+    );
+}
+
 
   // Alias para mantener compatibilidad con código existente
   listarTodas(): Observable<Categoria[]> {
@@ -46,11 +55,11 @@ export class CategoriasService {
     return this.http.post(this.baseUrl, categoria, { headers: this.getHeaders() });
   }
 
-  actualizar(id: string, categoria: Partial<Categoria>): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${id}`, categoria, { headers: this.getHeaders() });
+  actualizar(name: string, categoria: Partial<Categoria>): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${name}`, categoria, { headers: this.getHeaders() });
   }
 
-  eliminar(id: string): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${id}`, { headers: this.getHeaders() });
+  eliminar(name: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/${name}`, { headers: this.getHeaders() });
   }
 }
