@@ -16,6 +16,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from "@angular/material/button";
 import Swal from "sweetalert2";
 import { Router, RouterModule, RouterOutlet } from "@angular/router";
+import { MatSelectModule } from '@angular/material/select';
   // Ya lo tienes si usas Reactive Forms
 
 
@@ -36,6 +37,7 @@ export class EditarPerfilAdminComponent {
   form!: FormGroup;
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
+ciudades: string[] = [];
 
 
   constructor(
@@ -67,6 +69,16 @@ ngOnInit(): void {
   } else {
     console.warn('No se encontró userId en localStorage');
   }
+
+  //CARGAR CIUDADES
+  this.authService.getCiudades().subscribe({
+      next: (data) => {
+        this.ciudades = data;
+      },
+      error: (err) => {
+        console.error('Error al obtener ciudades:', err);
+      }
+    });
 }
 
 

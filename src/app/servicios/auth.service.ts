@@ -84,7 +84,7 @@ actualizarUsuario(userId: string, data: any): Observable<any> {
 }
 
 eliminaerUsuario(user: any): Observable<any> {
-  return this.http.put<any>(`${this.baseUrl}$status`, user, {
+  return this.http.put<any>(`${this.baseUrl}status`, user, {
     headers: this.getHeaders()
   }).pipe(
     map(response => {
