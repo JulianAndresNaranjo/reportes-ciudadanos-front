@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { map, Observable, tap } from 'rxjs';
+import { catchError, map, Observable, tap, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Route, Router } from '@angular/router';
 export interface usuario {
@@ -29,6 +29,8 @@ export interface Usuario {
 })
 export class AuthService {
   
+  
+  
 
   constructor(private http: HttpClient,private router:Router) { }
   private baseUrl = 'http://localhost:8080/users/';
@@ -49,6 +51,40 @@ export class AuthService {
       'Content-Type': 'application/json'
     });
   }
+obtenerUsuario(userId: string): Observable<Usuario> {
+    return this.http.get<any>(`${this.baseUrl}${userId}`, { headers: this.getHeaders() })
+      .pipe(
+        map(response => {
+          if (response && response.datos) {
+            return response.datos as Usuario;
+          } else {
+            console.warn('La respuesta del backend no tiene "datos":', response);
+            return {} as Usuario;
+          }
+        })
+      );
+  }
+
+actualizarUsuario(userId: string, data: any): Observable<any> {
+  return this.http.put<any>(`${this.baseUrl}${userId}`, data, { headers: this.getHeaders() })
+    .pipe(
+      map(response => {
+        if (response && response.datos) {
+          return response.datos;
+        } else {
+          console.warn('La respuesta del backend no tiene "datos":', response);
+          return null;
+        }
+      }),
+      catchError(err => {
+        console.error('Error al actualizar usuario:', err);
+        return throwError(() => err);
+      })
+    );
+}
+
+
+
 
  listarUsuarios(): Observable<Usuario[]> {
   return this.http.get<any>(`${this.baseUrl}`, { headers: this.getHeaders() })

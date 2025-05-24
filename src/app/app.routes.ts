@@ -9,6 +9,7 @@ import { GestionReportesComponent } from './paginas/dashboard-admin/pages/gestio
 import { GestionCategoriasComponent } from './paginas/dashboard-admin/pages/gestion-categorias/gestion-categorias.component';
 import { AdminInicioComponent } from './paginas/dashboard-admin/pages/admin-inicio/admin-inicio.component';
 import { DetalleReporteComponent } from './paginas/detalle-reporte/detalle-reporte.component';
+import { EditarPerfilAdminComponent } from './paginas/dashboard-admin/pages/editar-perfil-admin/editar-perfil-admin.component';
 
 
 export const routes: Routes = [
@@ -25,6 +26,7 @@ component: DashboardAdminComponent,
       { path: '', component: AdminInicioComponent },
       { path: 'categorias', component: GestionCategoriasComponent },
       { path: 'reportes', component: GestionReportesComponent },
+      { path: 'editarPerfilAdmin', component: EditarPerfilAdminComponent }
     ]
   },
    { path: "**", pathMatch: "full", redirectTo: "" }

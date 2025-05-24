@@ -1,0 +1,45 @@
+.form-container {
+    max-width: 400px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .title {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  /* Snackbar personalizado */
+  ::ng-deep .custom-snackbar {
+    background-color: #ffffff;
+    color: #333333;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    font-size: 14px;
+  }
+  
+  ::ng-deep .custom-snackbar .mat-simple-snackbar-action {
+    color: #1976d2;
+    font-weight: bold;
+  }
+  
+  ::ng-deep .custom-snackbar .mat-simple-snackbar {
+    display: flex;
+    align-items: center;
+  }
+  
