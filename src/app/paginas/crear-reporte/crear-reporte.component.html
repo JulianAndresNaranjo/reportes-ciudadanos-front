@@ -1,73 +1,108 @@
-<!-- Título -->
-<div class="form-group">
-  <label for="titulo">Título *</label>
-  <input type="text" id="titulo" [(ngModel)]="titulo" class="form-control" 
-         placeholder="Ej: Robo a mano armada" required>
-</div>
+<div class="reporte-detalle-container">
+  <h1 class="titulo">Crear Nuevo Reporte</h1>
 
-<!-- Descripción -->
-<div class="form-group">
-  <label for="descripcion">Descripción *</label>
-  <textarea id="descripcion" [(ngModel)]="descripcion" class="form-control" 
-            placeholder="Describe lo sucedido" required rows="4"></textarea>
-</div>
+  <!-- Título -->
+  <div class="form-group">
+    <label for="titulo">Título *</label>
+    <input
+      type="text"
+      id="titulo"
+      [(ngModel)]="titulo"
+      class="form-control"
+      placeholder="Ej: Robo a mano armada"
+      required
+    />
+  </div>
 
-<!-- Categoría -->
-<div class="form-group">
-  <label for="categoria">Categoría *</label>
-  <select id="categoria" [(ngModel)]="categoria" class="form-control" required>
-    <option value="">Selecciona una categoría</option>
-    <option *ngFor="let cat of categorias" [value]="cat.name">{{ cat.name }}</option>
-  </select>
-</div>
+  <!-- Descripción -->
+  <div class="form-group">
+    <label for="descripcion">Descripción *</label>
+    <textarea
+      id="descripcion"
+      [(ngModel)]="descripcion"
+      class="form-control"
+      placeholder="Describe lo sucedido"
+      required
+      rows="4"
+    ></textarea>
+  </div>
 
-<!-- Imagen -->
-<div class="form-group">
-  <label for="imagen">Foto del incidente</label>
-  <input type="file" id="imagen" (change)="onFileSelected($event)" 
-         accept="image/*" class="form-control">
-  <div *ngIf="imagenPreview" class="mt-2">
-    <img [src]="imagenPreview" alt="Vista previa" style="max-width: 200px; max-height: 200px;">
+  <!-- Categoría -->
+  <div class="form-group">
+    <label for="categoria">Categoría *</label>
+    <select
+      id="categoria"
+      [(ngModel)]="categoria"
+      class="form-control"
+      required
+    >
+      <option value="">Selecciona una categoría</option>
+      <option *ngFor="let cat of categorias" [value]="cat.name">{{
+        cat.name
+      }}</option>
+    </select>
+  </div>
+
+  <!-- Imagen -->
+  <div class="form-group">
+    <label for="imagen">Foto del incidente</label>
+    <input
+      type="file"
+      id="imagen"
+      (change)="onFileSelected($event)"
+      accept="image/*"
+      class="form-control"
+    />
+    <div *ngIf="imagenPreview" class="mt-2">
+      <img
+        [src]="imagenPreview"
+        alt="Vista previa"
+        style="max-width: 200px; max-height: 200px;"
+      />
+    </div>
+  </div>
+
+  <!-- Mapa -->
+  <div class="form-group">
+    <label>Selecciona una ubicación en el mapa *</label>
+    <app-mapa (ubicacionSeleccionada)="onUbicacionMapa($event)"></app-mapa>
+    <div *ngIf="ubicacion" class="alert alert-info mt-2">
+      <strong>Ubicación seleccionada:</strong><br />
+      Latitud: {{ ubicacion.latitude }}<br />
+      Longitud: {{ ubicacion.longitude }}
+    </div>
+  </div>
+
+  <!-- Campos para la ubicación (nombre y descripción) -->
+  <div class="form-group" *ngIf="ubicacion">
+    <label for="ubicacionName">Nombre del lugar</label>
+    <input
+      type="text"
+      id="ubicacionName"
+      [(ngModel)]="ubicacion.name"
+      class="form-control"
+      placeholder="Ej: Universidad del Quindío"
+    />
+
+    <label for="ubicacionDescripcion" class="mt-2">Descripción del lugar</label>
+    <textarea
+      id="ubicacionDescripcion"
+      [(ngModel)]="ubicacion.description"
+      class="form-control"
+      placeholder="Describe el lugar o la zona"
+      rows="3"
+    ></textarea>
+  </div>
+
+  <!-- Botones de acción -->
+  <div class="botones-accion form-group mt-3">
+    <button
+      class="btn-enviar"
+      (click)="enviarReporte()"
+      [disabled]="!titulo || !descripcion || !categoria || !ubicacion"
+    >
+      Enviar Reporte
+    </button>
+    <button class="btn-volver" (click)="volver()">Volver</button>
   </div>
 </div>
-
-<!-- Mapa -->
-<div class="form-group">
-  <label>Selecciona una ubicación en el mapa *</label>
-  <app-mapa (ubicacionSeleccionada)="onUbicacionMapa($event)"></app-mapa>
-  <div *ngIf="ubicacion" class="alert alert-info mt-2">
-    <strong>Ubicación seleccionada:</strong><br>
-    Latitud: {{ ubicacion.latitude }}<br>
-    Longitud: {{ ubicacion.longitude }}
-  </div>
-</div>
-
-<!-- Campos para la ubicación (nombre y descripción) -->
-<div class="form-group" *ngIf="ubicacion">
-  <label for="ubicacionName">Nombre del lugar</label>
-  <input type="text" id="ubicacionName" [(ngModel)]="ubicacion.name" 
-         class="form-control" placeholder="Ej: Universidad del Quindío">
-
-  <label for="ubicacionDescripcion" class="mt-2">Descripción del lugar</label>
-  <textarea id="ubicacionDescripcion" [(ngModel)]="ubicacion.description" 
-            class="form-control" placeholder="Describe el lugar o la zona" rows="3"></textarea>
-</div>
-
-<!-- Botón enviar -->
-<div class="form-group mt-3">
-  <button (click)="enviarReporte()" class="btn btn-primary" 
-          [disabled]="!titulo || !descripcion || !categoria || !ubicacion">
-    Enviar Reporte
-  </button>
-</div>
-
-<!-- Debug info (remover en producción) -->
-<div class="mt-4" *ngIf="false">
-  <h5>Debug Info:</h5>
-  <p>Título: {{ titulo }}</p>
-  <p>Descripción: {{ descripcion }}</p>
-  <p>Categoría: {{ categoria }}</p>
-  <p>Ubicación: {{ ubicacion | json }}</p>
-  <p>Imagen: {{ imagenSeleccionada?.name }}</p>
-</div>
-

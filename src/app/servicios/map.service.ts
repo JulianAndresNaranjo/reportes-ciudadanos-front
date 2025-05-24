@@ -46,25 +46,28 @@ export class MapService {
    });
  }
  pintarMarcadores(reportes: any[]) {
-  reportes.forEach(reporte => {
-    if (!reporte.location || reporte.location.longitude == null || reporte.location.latitude == null) {
-      console.warn('Reporte sin ubicación válida:', reporte);
-      return;
-    }
-    
-    const popupHtml = `
-      <strong>${reporte.title}</strong><br>
-      <em>${reporte.description}</em><br>
-      <small><b>Categoría:</b> ${reporte.nombreCategoria ?? '—'}</small><br>
-      <small><b>Estado:</b> ${reporte.status ?? 'SIN ESTADO'}</small><br><br>
-      <a href="/dashboard/reportes/detalle/${reporte.id}" target="_self" style="color: #007bff; text-decoration: underline;">📄 Ver detalles</a>
-    `;
-    
-    new mapboxgl.Marker({ color: 'red' })
-      .setLngLat([reporte.location.longitude, reporte.location.latitude])
-      .setPopup(new mapboxgl.Popup().setHTML(popupHtml))
-      .addTo(this.mapa);
-  });
+  reportes
+    .filter(reporte =>
+      reporte.status?.toUpperCase() !== 'ELIMINADO' &&
+      reporte.location &&
+      reporte.location.longitude != null &&
+      reporte.location.latitude != null
+    )
+    .forEach(reporte => {
+      const popupHtml = `
+        <strong>${reporte.title}</strong><br>
+        <em>${reporte.description}</em><br>
+        <small><b>Categoría:</b> ${reporte.nombreCategoria ?? '—'}</small><br>
+        <small><b>Estado:</b> ${reporte.status ?? 'SIN ESTADO'}</small><br><br>
+        <a href="/dashboard/reportes/detalle/${reporte.id}" target="_self" style="color: #007bff; text-decoration: underline;">📄 Ver detalles</a>
+      `;
+
+      new mapboxgl.Marker({ color: 'red' })
+        .setLngLat([reporte.location.longitude, reporte.location.latitude])
+        .setPopup(new mapboxgl.Popup().setHTML(popupHtml))
+        .addTo(this.mapa);
+    });
 }
+
 
 }

@@ -1,11 +1,10 @@
 <div class="dashboard-container">
   <aside class="sidebar">
     <h4>Menú</h4>
-    <ul>
-      <li><a routerLink="/home">Inicio</a></li>
-      <li><a routerLink="/dashboard/reportes">Reportes</a></li>
-      <li> <button (click)="crearReporte()">Crear Reporte</button></li>
-      <!-- Agrega más opciones aquí -->
+    <ul class="sin-puntos">
+      <li>
+        <button class="btn-crear-reporte" (click)="crearReporte()">📝 Crear Reporte</button>
+      </li>
     </ul>
   </aside>
   <main class="main-content">
