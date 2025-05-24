@@ -2,9 +2,9 @@
 
 <form [formGroup]="form" (ngSubmit)="guardarCambios()" class="form-container">
   <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Nombre</mat-label>
-    <input matInput formControlName="nombre" />
-  </mat-form-field>
+  <mat-label>Nombre</mat-label>
+  <input matInput formControlName="nombre" readonly />
+</mat-form-field>
 
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Teléfono</mat-label>
@@ -17,7 +17,7 @@
   </mat-form-field>
 
   <div class="button-group">
-    <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Guardar Cambios</button>
+    <button mat-raised-button color="primary" type="submit" (click)="guardarCambios()" [disabled]="form.invalid">Guardar Cambios</button>
     <button mat-raised-button color="warn" type="button" (click)="eliminarCuenta()">Eliminar Cuenta</button>
   </div>
 </form>

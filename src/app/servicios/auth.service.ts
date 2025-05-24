@@ -83,6 +83,26 @@ actualizarUsuario(userId: string, data: any): Observable<any> {
     );
 }
 
+eliminaerUsuario(user: any): Observable<any> {
+  return this.http.put<any>(`${this.baseUrl}$status`, user, {
+    headers: this.getHeaders()
+  }).pipe(
+    map(response => {
+      if (response && response.datos) {
+        return response.datos;
+      } else {
+        console.warn('La respuesta del backend no tiene "datos":', response);
+        return null;
+      }
+    }),
+    catchError(err => {
+      console.error('Error al eliminar usuario:', err);
+      return throwError(() => err);
+    })
+  );
+}
+
+
 
 
 

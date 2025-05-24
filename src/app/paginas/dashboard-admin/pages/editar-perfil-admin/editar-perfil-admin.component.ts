@@ -15,6 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from "@angular/material/button";
 import Swal from "sweetalert2";
+import { Router, RouterModule, RouterOutlet } from "@angular/router";
   // Ya lo tienes si usas Reactive Forms
 
 
@@ -25,6 +26,7 @@ import Swal from "sweetalert2";
     MatInputModule,
     MatButtonModule,
     ReactiveFormsModule,
+    RouterOutlet, RouterModule,
     HttpClientModule
   ],
   templateUrl: './editar-perfil-admin.component.html',
@@ -38,6 +40,7 @@ export class EditarPerfilAdminComponent {
 
   constructor(
     private authService: AuthService,
+    private router: Router
   ) {}
 
 ngOnInit(): void {
@@ -67,12 +70,23 @@ ngOnInit(): void {
 }
 
 
-  guardarCambios(): void {
+ guardarCambios(): void {
   if (this.form.valid) {
-    const datosActualizados = this.form.value;
+    const datosFormulario = this.form.value;
+
+    // Construir el objeto JSON que quieres enviar
+    const datosAEnviar = {
+      residenceCity: datosFormulario.ciudad || '',  // usar el valor del formulario o cadena vacía
+      phone: datosFormulario.telefono || '',
+      address: '',  // vacio explícito
+      email: ''     // vacio explícito
+    };
+
     const userId = localStorage.getItem('userId') || '';
 
-    this.authService.actualizarUsuario(userId, datosActualizados).subscribe({
+    console.log('Datos a actualizar:', datosAEnviar);
+
+    this.authService.actualizarUsuario(userId, datosAEnviar).subscribe({
       next: (res: any) => {
         Swal.fire({
           icon: 'success',
@@ -100,27 +114,55 @@ ngOnInit(): void {
   }
 }
 
-  eliminarCuenta(): void {
-    /*const authToken = localStorage.getItem('authToken');
-    const decodeToken: any = jwtDecode(authToken || '');
-    const userId = decodeToken.id;
-  
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${authToken}`
-    });
-  
-    if (confirm('¿Estás seguro de que deseas eliminar tu cuenta?')) {
-      this.authService.deleteUser(userId, headers).subscribe({
+
+ eliminarCuenta(): void {
+  const userId = localStorage.getItem('userId') || '';
+
+  console.log('ID de usuario a eliminar:', userId);
+
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: '¿Deseas eliminar tu cuenta? Esta acción no se puede deshacer.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const payload = {
+        userId: userId,
+        newStatus: 'INACTIVO'
+      };
+
+      this.authService.eliminaerUsuario(payload).subscribe({
         next: (res: any) => {
-          alert(res.mensaje || 'Cuenta eliminada correctamente.');
-          this.authService.cerrarSesion();
+          Swal.fire({
+            icon: 'success',
+            title: 'Cuenta eliminada',
+            text: res.mensaje || 'Tu cuenta ha sido eliminada correctamente.',
+            confirmButtonColor: '#3085d6'
+          }).then(() => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('rol');
+            localStorage.removeItem('userId');
+            this.router.navigate(['/login']);
+          });
         },
         error: (err) => {
-          console.error('Error al eliminar la cuenta:', err);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: err.error?.mensaje || 'Hubo un error al eliminar la cuenta. Intenta de nuevo más tarde.',
+            confirmButtonColor: '#d33'
+          });
         }
       });
-    }*/
-  }
-  
+    }
+  });
+}
+
+
 
 }
