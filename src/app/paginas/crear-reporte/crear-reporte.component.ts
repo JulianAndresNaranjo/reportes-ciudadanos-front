@@ -8,7 +8,7 @@ import { ReportesService } from '../../servicios/reportes.service';
 import { CrearReporteDTO } from '../../dto/respuesta-dto';
 import { Router } from '@angular/router';
 import { AuthService } from '../../servicios/auth.service';
-import Swal from 'sweetalert2'; // <-- Importar SweetAlert2
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-crear-reporte',
