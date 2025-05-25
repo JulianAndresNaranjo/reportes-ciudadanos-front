@@ -33,56 +33,59 @@ export class GestionReportesComponent implements OnInit {
     this.obtenerReportesDeArmenia();
   }
 
-  obtenerReportesDeArmenia() {
-    this.reportesService.listarTodos().subscribe({
-      next: (data) => {
-        this.reportes = data;
+ obtenerReportesDeArmenia() {
+  this.reportesService.listarTodos().subscribe({
+    next: (data) => {
+      this.reportes = data;
 
-        this.categoriasService.listar().subscribe({
-          next: (categorias) => {
-            this.reportes.forEach(reporte => {
-              const categoria = categorias.find(cat => cat.id === reporte.categoriaId);
-              reporte.nombreCategoria = categoria ? categoria.name : 'Desconocida';
-            });
-            this.authservice.listarUsuarios().subscribe({
-              next: (usuarios) => {
-                this.usuarios = usuarios;
-                this.reportes.forEach(reporte => {
-                  const usuario = this.usuarios.find(user => user.id === reporte.clienteId);
-                  reporte.nombreCliente = usuario ? usuario.nombre : 'Desconocido';
-                });
-              },
-              error: (err) => {
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Error al cargar usuarios',
-                  text: 'No se pudieron obtener los usuarios desde el servidor.',
-                  confirmButtonColor: '#dc3545'
-                });
-              }
-            });
+      this.categoriasService.listar().subscribe({
+        next: (categorias) => {
+          this.authservice.listarUsuarios().subscribe({
+            next: (usuarios) => {
+              this.usuarios = usuarios;
+              console.log('Usuarios obtenidos:', this.usuarios);
 
+              // Relacionar categorías y usuarios a cada reporte
+              this.reportes.forEach(reporte => {
+                const categoria = categorias.find(cat => cat.id === reporte.categoryId);
+                reporte.nombreCategoria = categoria ? categoria.name : 'Desconocida';
 
-            // Crear un FormControl por cada reporte para el select
-            this.reportes.forEach(r => {
-              this.estadoSeleccionado[r.id] = new FormControl(r.estadoActual);
-            });
+                const usuario = this.usuarios.find(user => user.id === reporte.userId);
+                reporte.nombreCliente = usuario ? usuario.name : 'Desconocido';
+              });
 
-            this.cargando = false;
-            console.log('Reportes obtenidos:', this.reportes);
-          },
-          error: (err) => {
-            console.error('Error al cargar categorías:', err);
-            this.cargando = false;
-          }
-        });
-      },
-      error: (err) => {
-        console.error('Error al cargar reportes:', err);
-        this.cargando = false;
-      }
-    });
-  }
+              // Crear un FormControl por cada reporte para el select
+              this.reportes.forEach(r => {
+                this.estadoSeleccionado[r.id] = new FormControl(r.estadoActual);
+              });
+
+              this.cargando = false;
+              console.log('Reportes obtenidos:', this.reportes);
+            },
+            error: (err) => {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error al cargar usuarios',
+                text: 'No se pudieron obtener los usuarios desde el servidor.',
+                confirmButtonColor: '#dc3545'
+              });
+              this.cargando = false;
+            }
+          });
+        },
+        error: (err) => {
+          console.error('Error al cargar categorías:', err);
+          this.cargando = false;
+        }
+      });
+    },
+    error: (err) => {
+      console.error('Error al cargar reportes:', err);
+      this.cargando = false;
+    }
+  });
+}
+
 
   
   
